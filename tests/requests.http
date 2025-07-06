@@ -1,4 +1,12 @@
 @host = http://localhost:8080
 
-GET {{host}}/task-api
+### Users Routes Test
+POST {{host}}/api/v1/users
 Content-Type: application/json
+
+{
+    "name": "Ricardo",
+    "email": "ricardo@teste.com",
+    "password": "12345",
+    "role": "admin"
+}
