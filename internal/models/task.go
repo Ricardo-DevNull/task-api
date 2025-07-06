@@ -1,11 +1,9 @@
 package models
 
-import "gorm.io/gorm"
-
 type Task struct {
-	gorm.Model
-	Title         string
-	Description   string
-	Status        string
-	CompletedDate string
+	Default
+	Title         string `json:"title"`
+	Description   string `json:"description"`
+	Status        string `json:"status"`
+	CompletedDate string `json:"completedDate"`
 }
