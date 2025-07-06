@@ -1,0 +1,22 @@
+package router
+
+import (
+	"github.com/Ricardo-DevNull/task-api/internal/handlers"
+	"github.com/Ricardo-DevNull/task-api/internal/repository"
+	"github.com/Ricardo-DevNull/task-api/internal/services"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
+
+func SetupRoutes(r *gin.Engine, db *gorm.DB) {
+	api := r.Group("/api/v1")
+
+	userRepo := repository.NewUserRepository(db)
+	userService := services.NewUserService(userRepo)
+	userHandler := handlers.NewUserHandler(userService)
+
+	userRoutes := api.Group("/users")
+	{
+		userRoutes.POST("", userHandler.CreateUser)
+	}
+}
