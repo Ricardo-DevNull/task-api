@@ -14,8 +14,8 @@ func main() {
 	// Start Engine Gin Framework
 	r := gin.Default()
 
-	// Init Database
-	db := database.InitDB()
+	// Connect Database
+	db := database.ConnectDB()
 
 	// Execute migrations
 	database.Migrate(db)

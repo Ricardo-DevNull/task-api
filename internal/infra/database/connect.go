@@ -9,9 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
-func InitDB() {
+func ConnectDB() *gorm.DB {
 
 	dbConfig := config.DBConfig
 
@@ -25,10 +23,12 @@ func InitDB() {
 
 	var err error
 
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Error connect database")
 	}
 	
 	log.Println("Connection database successfully!")
+
+	return db
 }

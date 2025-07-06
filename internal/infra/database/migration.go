@@ -4,10 +4,11 @@ import (
 	"log"
 
 	"github.com/Ricardo-DevNull/task-api/internal/models"
+	"gorm.io/gorm"
 )
 
-func Migrate() {
-	err := DB.AutoMigrate(
+func Migrate(db *gorm.DB) {
+	err := db.AutoMigrate(
 		&models.User{},
 		&models.Task{},
 	)
