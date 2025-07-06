@@ -1,11 +1,9 @@
 package models
 
+import "gorm.io/gorm"
+
 type Task struct {
-	// TODO: Usar struct default do gorm
-	// ID
-	// Created_At
-	// Updated_At
-	// Deleted_At
+	gorm.Model
 	Title         string
 	Description   string
 	Status        string

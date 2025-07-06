@@ -1,0 +1,4 @@
+@host = http://localhost:8080
+
+GET {{host}}/task-api
+Content-Type: application/json
