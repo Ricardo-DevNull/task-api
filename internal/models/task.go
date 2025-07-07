@@ -1,9 +1,15 @@
 package models
 
+import (
+	"time"
+
+	"github.com/Ricardo-DevNull/task-api/internal/models/enums"
+)
+
 type Task struct {
 	Default
-	Title         string `json:"title"`
-	Description   string `json:"description"`
-	Status        string `json:"status"`
-	CompletedDate string `json:"completedDate"`
+	Title         string           `gorm:"varchar(255)"`
+	Description   string           `gorm:"text"`
+	Status        enums.TaskStatus `gorm:"varchar(20)"`
+	CompletedDate time.Time        `gorm:"timestamp"`
 }

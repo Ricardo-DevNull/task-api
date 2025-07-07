@@ -22,4 +22,13 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 		userRoutes.PUT("/:id", userHandler.UpdateUser)
 		userRoutes.DELETE("/:id", userHandler.DeleteUser)
 	}
+
+	taskRepo := repository.NewTaskRepository(db)
+	taskService := services.NewTaskService(taskRepo)
+	taskHandler := handlers.NewTaskService(taskService)
+
+	taskRouter := api.Group("/tasks")
+	{
+		taskRouter.POST("", taskHandler.CreateTask)
+	}
 }
