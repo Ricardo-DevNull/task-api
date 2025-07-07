@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"net/http"
+	"strconv"
 
-	"github.com/Ricardo-DevNull/task-api/internal/models"
+	"github.com/Ricardo-DevNull/task-api/internal/models/dtos"
 	"github.com/Ricardo-DevNull/task-api/internal/services"
 	"github.com/gin-gonic/gin"
 )
@@ -17,17 +18,83 @@ func NewUserHandler(userService services.UserService) *UserHandler {
 }
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var user models.User
+	var newUser dtos.UserRequest
 
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(&newUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := h.UserService.CreateUser(&user); err != nil {
+	user, err := h.UserService.CreateUser(&newUser)
+	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, user)
+	response := &dtos.UserResponse{
+		Default: user.Default,
+		Name:    user.Name,
+		Email:   user.Email,
+		Role:    user.Role,
+	}
+
+	c.JSON(http.StatusCreated, response)
+}
+
+func (h *UserHandler) GetUser(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := h.UserService.GetUserByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+}
+
+func (h *UserHandler) UpdateUser(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var newUser dtos.UpdateUserRequest
+	if err := c.ShouldBindJSON(&newUser); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := h.UserService.UpdateUser(uint(id), &newUser)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error})
+		return
+	}
+
+	response := &dtos.UserResponse{
+		Name: user.Name,
+		Role: user.Role,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *UserHandler) DeleteUser(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err = h.UserService.DeleteUserByID(uint(id)); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Deleted user successfully!"})
 }

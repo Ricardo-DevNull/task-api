@@ -1,10 +1,14 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Default struct {
-	ID        uint
-	CreatedAt *time.Time
-	UpdatedAt *time.Time
-	DeletedAt *time.Time
+	ID        uint            `json:"id,omitempty" gorm:"primaryKey"`
+	CreatedAt *time.Time      `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time      `json:"updatedAt,omitempty"`
+	DeletedAt *gorm.DeletedAt `json:"-" gorm:"index"`
 }
