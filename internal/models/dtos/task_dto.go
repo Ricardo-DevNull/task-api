@@ -7,8 +7,8 @@ import (
 
 type TaskRequest struct {
 	models.BaseModel
-	Title       string `json:"title"`
-	Description string `json:"description"`
+	Title       string `json:"title" binding:"required,min=3,max=100"`
+	Description string `json:"description" binding:"omitempty,max=300"`
 }
 
 type TaskResponse struct {

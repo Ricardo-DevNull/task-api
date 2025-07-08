@@ -3,10 +3,10 @@ package dtos
 import "github.com/Ricardo-DevNull/task-api/internal/models"
 
 type UserRequest struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Role     string `json:"role"`
+	Name     string `json:"name" binding:"required,min=2,max=100"`
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required,min=4"`
+	Role     string `json:"role" binding:"required,oneof=admin user"`
 }
 
 type UserResponse struct {
@@ -17,6 +17,6 @@ type UserResponse struct {
 }
 
 type UpdateUserRequest struct {
-	Name string `json:"name"`
-	Role string `json:"role"`
+	Name string `json:"name" binding:"min=2,max=100"`
+	Role string `json:"role" binding:"oneof=admin user"`
 }
