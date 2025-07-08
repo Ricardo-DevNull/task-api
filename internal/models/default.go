@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Default struct {
+type BaseModel struct {
 	ID        uint            `json:"id,omitempty" gorm:"primaryKey"`
 	CreatedAt *time.Time      `json:"createdAt,omitempty"`
 	UpdatedAt *time.Time      `json:"updatedAt,omitempty"`

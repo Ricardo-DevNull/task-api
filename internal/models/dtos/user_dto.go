@@ -10,7 +10,7 @@ type UserRequest struct {
 }
 
 type UserResponse struct {
-	models.Default
+	models.BaseModel
 	Name  string `json:"name,omitempty"`
 	Email string `json:"email,omitempty"`
 	Role  string `json:"role,omitempty"`

@@ -6,13 +6,13 @@ import (
 )
 
 type TaskRequest struct {
-	models.Default
+	models.BaseModel
 	Title       string `json:"title"`
 	Description string `json:"description"`
 }
 
 type TaskResponse struct {
-	models.Default
+	models.BaseModel
 	Title       string           `json:"title"`
 	Description string           `json:"description"`
 	Status      enums.TaskStatus `json:"status"`

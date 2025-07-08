@@ -32,10 +32,10 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	}
 
 	response := &dtos.UserResponse{
-		Default: user.Default,
-		Name:    user.Name,
-		Email:   user.Email,
-		Role:    user.Role,
+		BaseModel: user.BaseModel,
+		Name:      user.Name,
+		Email:     user.Email,
+		Role:      user.Role,
 	}
 
 	c.JSON(http.StatusCreated, response)

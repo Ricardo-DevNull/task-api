@@ -1,7 +1,7 @@
 package models
 
 type User struct {
-	Default
+	BaseModel
 	Name     string
 	Email    string
 	Password string

@@ -32,7 +32,7 @@ func (h *TaskHandler) CreateTask(c *gin.Context) {
 	}
 
 	response := &dtos.TaskResponse{
-		Default:     task.Default,
+		BaseModel:   task.BaseModel,
 		Title:       task.Title,
 		Description: task.Description,
 		Status:      enums.StatusAvailable,
