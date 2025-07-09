@@ -1,14 +1,14 @@
 package services
 
 import (
-	"github.com/Ricardo-DevNull/task-api/internal/models"
 	"github.com/Ricardo-DevNull/task-api/internal/models/dtos"
+	"github.com/Ricardo-DevNull/task-api/internal/models/entities"
 	"github.com/Ricardo-DevNull/task-api/internal/models/enums"
 	"github.com/Ricardo-DevNull/task-api/internal/repository"
 )
 
 type TaskService interface {
-	CreateTask(newTask *dtos.TaskRequest) (*models.Task, error)
+	CreateTask(newTask *dtos.TaskRequest) (*entities.Task, error)
 }
 
 type taskService struct {
@@ -19,9 +19,9 @@ func NewTaskService(r repository.TaskRepository) TaskService {
 	return &taskService{repo: r}
 }
 
-func (s *taskService) CreateTask(newTask *dtos.TaskRequest) (*models.Task, error) {
+func (s *taskService) CreateTask(newTask *dtos.TaskRequest) (*entities.Task, error) {
 
-	task := &models.Task{
+	task := &entities.Task{
 		Title:       newTask.Title,
 		Description: newTask.Description,
 		Status:      enums.StatusAvailable,

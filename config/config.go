@@ -30,20 +30,17 @@ func init() {
 		log.Fatal("Error load .env file")
 	}
 
+	
+	SvConfig = &ServerConfig{
+		Port: getEnv("SERVER_PORT", "9090"),
+	}
+
 	DBConfig = &DatabaseConfig{
 		Host:     getEnv("DB_HOST", "localhost"),
 		Port:     getEnv("DB_PORT", "5432"),
 		User:     getEnv("DB_USER", ""),
 		Password: getEnv("DB_PASSWORD", ""),
 		Name:     getEnv("DB_NAME", ""),
-	}
-
-	if DBConfig.Password == "" {
-
-	}
-
-	SvConfig = &ServerConfig{
-		Port: getEnv("SERVER_PORT", "9090"),
 	}
 
 	missingVars := []string{}

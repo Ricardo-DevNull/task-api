@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/Ricardo-DevNull/task-api/internal/handlers"
+	"github.com/Ricardo-DevNull/task-api/internal/middleware"
 	"github.com/Ricardo-DevNull/task-api/internal/repository"
 	"github.com/Ricardo-DevNull/task-api/internal/services"
 	"github.com/gin-gonic/gin"
@@ -17,10 +18,16 @@ func SetupRoutes(r *gin.Engine, db *gorm.DB) {
 
 	userRoutes := api.Group("/users")
 	{
-		userRoutes.POST("", userHandler.CreateUser)
-		userRoutes.GET("/:id", userHandler.GetUser)
-		userRoutes.PUT("/:id", userHandler.UpdateUser)
-		userRoutes.DELETE("/:id", userHandler.DeleteUser)
+		userRoutes.POST("/login", userHandler.Login)
+	}
+
+	authUserRoutes := api.Group("/users")
+	authUserRoutes.Use(middleware.Auth())
+	{
+		authUserRoutes.POST("", userHandler.CreateUser)
+		authUserRoutes.GET("/:id", userHandler.GetUser)
+		authUserRoutes.PUT("/:id", userHandler.UpdateUser)
+		authUserRoutes.DELETE("/:id", userHandler.DeleteUser)
 	}
 
 	taskRepo := repository.NewTaskRepository(db)

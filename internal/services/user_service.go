@@ -1,15 +1,17 @@
 package services
 
 import (
-	"github.com/Ricardo-DevNull/task-api/internal/models"
+	"github.com/Ricardo-DevNull/task-api/internal/middleware"
 	"github.com/Ricardo-DevNull/task-api/internal/models/dtos"
+	"github.com/Ricardo-DevNull/task-api/internal/models/entities"
 	"github.com/Ricardo-DevNull/task-api/internal/repository"
 )
 
 type UserService interface {
-	CreateUser(newUser *dtos.UserRequest) (*models.User, error)
-	GetUserByID(id uint) (*models.User, error)
-	UpdateUser(id uint, newUser *dtos.UpdateUserRequest) (*models.User, error)
+	LoginUser(authUser *dtos.UserLogin) (string, error)
+	CreateUser(newUser *dtos.UserRequest) (*entities.User, error)
+	GetUserByID(id uint) (*entities.User, error)
+	UpdateUser(id uint, newUser *dtos.UpdateUserRequest) (*entities.User, error)
 	DeleteUserByID(id uint) error
 }
 
@@ -21,9 +23,29 @@ func NewUserService(r repository.UserRepository) UserService {
 	return &userService{repo: r}
 }
 
-func (s *userService) CreateUser(newUser *dtos.UserRequest) (*models.User, error) {
+func (s *userService) LoginUser(authUser *dtos.UserLogin) (string, error) {
 
-	user := &models.User{
+	user, err := s.repo.FindByEmail(authUser.Email)
+	if err != nil {
+		return "", err
+	}
+
+	err = middleware.ComparePassword(authUser.Password, user.Password)
+	if err != nil {
+		return "", err
+	}
+
+	token, err := middleware.GenerateToken(user)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
+
+func (s *userService) CreateUser(newUser *dtos.UserRequest) (*entities.User, error) {
+
+	user := &entities.User{
 		Name:     newUser.Name,
 		Email:    newUser.Email,
 		Password: newUser.Password,
@@ -37,11 +59,11 @@ func (s *userService) CreateUser(newUser *dtos.UserRequest) (*models.User, error
 	return user, nil
 }
 
-func (s *userService) GetUserByID(id uint) (*models.User, error) {
+func (s *userService) GetUserByID(id uint) (*entities.User, error) {
 	return s.repo.FindByID(id)
 }
 
-func (s *userService) UpdateUser(id uint, newUser *dtos.UpdateUserRequest) (*models.User, error) {
+func (s *userService) UpdateUser(id uint, newUser *dtos.UpdateUserRequest) (*entities.User, error) {
 	user, err := s.repo.FindByID(id)
 	if err != nil {
 		return nil, err

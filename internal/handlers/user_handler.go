@@ -17,6 +17,25 @@ func NewUserHandler(userService services.UserService) *UserHandler {
 	return &UserHandler{UserService: userService}
 }
 
+func (h *UserHandler) Login(c *gin.Context) {
+	var authUser dtos.UserLogin
+
+	if err := c.ShouldBindJSON(&authUser); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	token, err := h.UserService.LoginUser(&authUser)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"access_token": token})
+
+}
+
+//TODO: Add encrypt password user
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var newUser dtos.UserRequest
 

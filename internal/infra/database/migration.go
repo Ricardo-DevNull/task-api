@@ -3,14 +3,14 @@ package database
 import (
 	"log"
 
-	"github.com/Ricardo-DevNull/task-api/internal/models"
+	"github.com/Ricardo-DevNull/task-api/internal/models/entities"
 	"gorm.io/gorm"
 )
 
 func Migrate(db *gorm.DB) {
 	err := db.AutoMigrate(
-		&models.User{},
-		&models.Task{},
+		&entities.User{},
+		&entities.Task{},
 	)
 
 	if err != nil {
